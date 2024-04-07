@@ -1,0 +1,25 @@
+---
+version: 0
+workflow: "workflow PoC"
+endpoints:
+  - path: /poc/stream
+    type: stream
+  - path: /poc/invoke
+    type: sync
+components:
+  - Start:
+      output_mappings: [input]
+  - Memory:
+      mode: ""
+      n: 2
+  - LLM:
+      prompts:
+        - prompt: "you are a help assistant, your name is 1234"
+          role: system
+        - prompt: "{input}"
+          role: user
+      model_id: meta.llama2-70b-chat-v1
+      use_history: true
+      output_mappings: [llm_output]
+  - End:
+      final_output: $llm_output
